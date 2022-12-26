@@ -1,0 +1,38 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:5
+    container_name: mysql
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: travellux
+      MYSQL_USER: mysql_user
+      MYSQL_PASSWORD: mysql_password
+      MYSQL_ROOT_PASSWORD: root
+  api:
+    depends_on:
+      - mysql
+    container_name: api
+    build:
+      dockerfile: Dockerfile
+      context: ./backend
+    ports:
+      - 3000:3000
+  client:
+    container_name: client
+    build:
+      dockerfile: Dockerfile
+      context: ./frontend
+    ports:
+      - 4000:80
+  adminer:
+      image: adminer:latest
+      restart: unless-stopped
+      ports:
+        - 8000:8080
+      depends_on:
+        - mysql
+      environment:
+        ADMINER_DEFAULT_SERVER: mysql
