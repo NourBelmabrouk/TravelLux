@@ -20,6 +20,15 @@ services:
       context: ./backend
     ports:
       - 3000:3000
+  booking-service:
+    depends_on:
+      - mysql
+    container_name: booking-service
+    build:
+      dockerfile: Dockerfile
+      context: ./booking-service
+    ports:
+      - 3050:3050
   client:
     container_name: client
     build:

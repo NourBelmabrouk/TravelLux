@@ -9,12 +9,11 @@ import { AuthModule } from './auth/auth.module';
 import { MailModule } from './mail/mail.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { TicketsModule } from './tickets/tickets.module';
-import { BookingModule } from './booking-module/booking.module';
 import { CarsModule } from './car-rent/car-rent.module';
 
 
 
-
+require("dotenv").config()
 @Module({
   imports: [
     MailModule,
@@ -23,11 +22,11 @@ import { CarsModule } from './car-rent/car-rent.module';
     }),
     TypeOrmModule.forRoot({
       type: "mysql",
-      host: "mysql",
-      port: 3306,
-      username: "mysql_user",
-      password: "mysql_password",
-      database: "travellux",
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       autoLoadEntities:true,
       synchronize: true,
     }),MulterModule.register({
@@ -37,7 +36,6 @@ import { CarsModule } from './car-rent/car-rent.module';
     AuthModule,
     MailModule,
     TicketsModule,
-    BookingModule,
     CarsModule
   ],
   controllers: [AppController],
