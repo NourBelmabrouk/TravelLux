@@ -11,7 +11,7 @@ import { DepartureOrderService } from 'src/app/services/departure-order.service'
   styleUrls: ['./payment.component.css']
 })
 export class PaymentComponent implements OnInit {
-
+  isSuccessful = false;
   paymentForm=this.formBuilder.group({
     price: [200],
     paymentMethod: ['',Validators.required]
@@ -38,6 +38,7 @@ export class PaymentComponent implements OnInit {
       price: this.paymentForm.controls['price'].value,
       paymentMethod: this.paymentForm.controls['paymentMethod'].value
     })
+    this.router.navigate(['/'])
   }
 
 }

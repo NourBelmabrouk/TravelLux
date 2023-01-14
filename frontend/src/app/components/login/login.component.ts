@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
       this.isLoggedIn = true;
       const user = this.tokenStorage.getUser();
       this.username = user.user.username;
-      this.profilepic="http://api:3000/users/showpic/"+user.user.profilepic
+      this.profilepic="http://localhost:3000/users/showpic/"+user.user.profilepic
 
     }
   }

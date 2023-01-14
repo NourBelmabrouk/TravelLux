@@ -66,7 +66,7 @@ export class ForfaitsComponent implements OnInit {
   onSubmit(){
     this.departureService.updateForfaitDetails({
       packageType: this.forfaitForm.controls['packageType'].value,
-      numberOfBags: this.forfaitForm.controls['numberOfBags'].value,
+      numberOfBags: "4",
       fastTrack: this.forfaitForm.controls['fastTrack'].value,
       upgrade: this.forfaitForm.controls['upgrade'].value,
       additionalBags: this.forfaitForm.controls['additionalBags'].value

@@ -29,8 +29,7 @@ export class UsersService {
     }
     const user = User.create(createUserDto);
     user.accountToken = token;
-    user.accountActivated = false;
-    await this.mailService.sendUserConfirmation(user, token);
+    user.accountActivated = true;
     await user.save();
 
     delete user.password;

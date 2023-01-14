@@ -20,6 +20,18 @@ services:
       context: ./backend
     ports:
       - 3000:3000
+    environment:
+      DB_TYPE: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: mysql_user
+      DB_PASSWORD: mysql_password
+      DB_NAME: travellux
+      JWT_SECRET: luxtravelsecretKey
+      MAIL_HOST: smtp.gmail.com
+      MAIL_USER: travellux.donotreplay@gmail.com
+      MAIL_PASSWORD: travelluxwebwork
+      MAIL_FROM: travellux.donotreplay@gmail.com
   booking-service:
     depends_on:
       - mysql
@@ -29,6 +41,13 @@ services:
       context: ./booking-service
     ports:
       - 3050:3050
+    environment:
+      DB_TYPE: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: mysql_user
+      DB_PASSWORD: mysql_password
+      DB_NAME: travellux
   client:
     container_name: client
     build:

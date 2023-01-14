@@ -1,4 +1,4 @@
-<form [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
+<form *ngIf="!isSuccessful" [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
 <div class="big_title">
   Welcome to contactless travel !
 </div>
@@ -117,3 +117,6 @@
   </div>
 </div>
 </form>
+<div class="alert alert-success" *ngIf="isSuccessful">
+  Your registration is successful!
+</div>

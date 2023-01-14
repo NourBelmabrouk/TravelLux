@@ -32,7 +32,7 @@ export class BookingOrderEntity {
     dateFlight: string;
 
     @Column()
-    timesFlight: string;
+    timeFlight: string;
     
     @Column({ type: 'date' })
     datePickUpOrDropOff: string;

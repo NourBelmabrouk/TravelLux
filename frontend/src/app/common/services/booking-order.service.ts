@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class BookingOrderService {
 
-  private bookingOrderUrl='http://booking-service:3050/booking-order/add'
+  private bookingOrderUrl='http://localhost:3050/booking-order/add'
 
   constructor(private http: HttpClient) { }
 

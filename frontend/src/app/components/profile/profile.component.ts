@@ -23,7 +23,7 @@ export class ProfileComponent implements OnInit {
 
   }
   showFile():string{
-    return "http://api:3000/users/showpic/"+this.currentUser.user.profilepic
+    return "http://localhost:3000/users/showpic/"+this.currentUser.user.profilepic
   }
 
 }
