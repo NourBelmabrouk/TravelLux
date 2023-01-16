@@ -2,9 +2,15 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { User } from './../users/user.entity';
 
+import { InjectMetric } from '@willsoto/nestjs-prometheus';
+import { Counter } from "prom-client";
+
 @Injectable()
 export class MailService {
-  constructor(private mailerService: MailerService) {}
+  constructor(
+    private mailerService: MailerService,
+    @InjectMetric("http_request_total") public counter: Counter<string>
+    ) {}
 
   async sendUserConfirmation(user: User, token: string) {
     const url = `http://api:3000/users/confirm/${token}`;
@@ -19,5 +25,6 @@ export class MailService {
         url,
       },
     });
+    this.counter.labels({route:"users", statusCode: "200"}).inc()
   }
 }

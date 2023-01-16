@@ -8,10 +8,12 @@ import { JwtStrategy } from './jwt.strategy';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { MailModule } from 'src/mail/mail.module';
+import { MonitoringModule } from 'src/monitoring/monitoring.module';
 
 @Module({
   imports: [
     UsersModule,
+    MonitoringModule,
     MailModule,
     PassportModule,
     JwtModule.registerAsync({

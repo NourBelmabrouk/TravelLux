@@ -5,20 +5,27 @@ import { CreateCarDto } from './dto/create-car.dto';
 
 import { Car } from './entity/car.entity';
 
+import { InjectMetric } from '@willsoto/nestjs-prometheus';
+import { Counter } from "prom-client";
+
+
 @Injectable()
 export class CarsService {
     constructor(
         @InjectRepository(Car)
         private carsRepository: Repository<Car>,
+        @InjectMetric("http_request_total") public counter: Counter<string>
     ){}
 
     // Find all cars
     async findAll(): Promise<Car[]>{
+        this.counter.inc(1)
         return await this.carsRepository.find();
     }
     
     // Find car by brand
     async findAllBrand(): Promise<string[]>{
+        this.counter.inc(1)
         var x: Car[] = [];
         var y: string[] = [];
         x = await this.carsRepository.query("SELECT DISTINCT brand FROM `car` WHERE 1 ;")
@@ -28,11 +35,13 @@ export class CarsService {
         return y;
     }
     async findByBrand(brand: string): Promise<Car[]>{
+        this.counter.inc(1)
         return await this.carsRepository.query("SELECT * FROM `car` where car.brand = '"+brand+"' ;");
     }
     
     // Find car by year
     async findAllYears(): Promise<number[]>{
+        this.counter.inc(1)
         var x: Car[] = [];
         var y: number[] = [];
         x = await this.carsRepository.query("SELECT DISTINCT year FROM `car` WHERE 1 ;")
@@ -42,11 +51,13 @@ export class CarsService {
         return y;
     }
     async findByYear(year: number): Promise<Car[]>{
+        this.counter.inc(1)
         return await this.carsRepository.query("SELECT * FROM `car` where car.year = '"+year+"' ;");
     }
     
     // Find car by car class
     async findAllClasses(): Promise<string[]>{
+        this.counter.inc(1)
         var x: Car[] = [];
         var y: string[] = [];
         x = await this.carsRepository.query("SELECT DISTINCT car_class FROM `car` WHERE 1 ;")
@@ -56,11 +67,13 @@ export class CarsService {
         return y;
     }
     async findByCarClass(car_class: string): Promise<Car[]>{
+        this.counter.inc(1)
         return await this.carsRepository.query("SELECT * FROM `car` where car.car_class = '"+car_class+"' ;");
     }
 
     // Find car by car type
     async findAllTypes(): Promise<string[]>{
+        this.counter.inc(1)
         var x: Car[] = [];
         var y: string[] = [];
         x = await this.carsRepository.query("SELECT DISTINCT car_type FROM `car` WHERE 1 ;")
@@ -70,16 +83,19 @@ export class CarsService {
         return y;
     }
     async findByCarType(car_type: string): Promise<Car[]>{
+        this.counter.inc(1)
         return await this.carsRepository.query("SELECT * FROM `car` where car.car_type = '"+car_type+"' ;");
     }
     
     // Find car by having AC
     async findByAC(ac: boolean): Promise<Car[]>{
+        this.counter.inc(1)
         return await this.carsRepository.query("SELECT * FROM `car` where car.hasAC = '"+ac+"' ;");
     }
 
     // Find car by Fuel policy
     async findAllFuelPolicies(): Promise<string[]>{
+        this.counter.inc(1)
         var x: Car[] = [];
         var y: string[] = [];
         x = await this.carsRepository.query("SELECT DISTINCT fuel_policy FROM `car` WHERE 1 ;")
@@ -89,11 +105,13 @@ export class CarsService {
         return y;
     } 
     async findByFuelPolicy(fuel_policy: string): Promise<Car[]>{
+        this.counter.inc(1)
         return await this.carsRepository.query("SELECT * FROM `car` where car.fuel_policy = '"+fuel_policy+"' ;");
     }
 
     // Find car by color
     async findAllColors(): Promise<string[]>{
+        this.counter.inc(1)
         var x: Car[] = [];
         var y: string[] = [];
         x = await this.carsRepository.query("SELECT DISTINCT color FROM `car` WHERE 1 ;")
@@ -103,11 +121,13 @@ export class CarsService {
         return y;
     } 
     async findByColor(color: string): Promise<Car[]>{
+        this.counter.inc(1)
         return await this.carsRepository.query("SELECT * FROM `car` where car.color = '"+color+"' ;");
     }
 
     // Find One car by id
     async findOne(id: string): Promise<Car>{
+        this.counter.inc(1)
         return await this.carsRepository.findOne(id);
     }
 
@@ -132,6 +152,7 @@ export class CarsService {
 
     // Delete a car By id
     async delete(id: string): Promise<void>{
+        this.counter.inc(1)
         await this.carsRepository.delete(id);
     }
 

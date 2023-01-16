@@ -3,6 +3,7 @@ FROM node:14-alpine AS builder
 WORKDIR "/app"
 
 COPY ./package.json ./
+COPY ./package-lock.json ./
 
 RUN npm install  --legacy-peer-deps  
 
@@ -23,3 +24,4 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 
 CMD [ "sh", "-c", "npm run start:prod"]
+

@@ -5,14 +5,20 @@ import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { AuthLoginDto } from './dto/auth-login.dto';
 
+import { InjectMetric } from '@willsoto/nestjs-prometheus';
+import { Counter } from "prom-client";
+
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    @InjectMetric("http_request_total") public counter: Counter<string>
   ) {}
 
   async login(authLoginDto: AuthLoginDto) {
+    this.counter.inc(1)
+    
     const user = await this.validateUser(authLoginDto);
 
     const payload = {

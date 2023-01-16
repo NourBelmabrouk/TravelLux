@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { MonitoringModule } from 'src/monitoring/monitoring.module';
 
 import { CarsController } from './cars/cars.controller';
 import { CarsService } from './cars/cars.service';
@@ -10,7 +11,7 @@ import { ReservationsService } from './reservations/reservations.service';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Car, Reservation])],
+  imports: [TypeOrmModule.forFeature([Car, Reservation]), MonitoringModule],
   controllers: [CarsController, ReservationsController],
   providers: [CarsService, ReservationsService],
 })

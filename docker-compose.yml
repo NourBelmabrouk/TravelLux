@@ -1,0 +1,122 @@
+version: "3"
+
+services:
+
+  mysql:
+    image: mysql:5
+    container_name: mysql
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: travellux
+      MYSQL_USER: mysql_user
+      MYSQL_PASSWORD: mysql_password
+      MYSQL_ROOT_PASSWORD: root
+
+  # api:
+  #   depends_on:
+  #     - mysql
+  #   container_name: api
+  #   build:
+  #     dockerfile: Dockerfile
+  #     context: ./backend
+  #   ports:
+  #     - 3000:3000
+  #   environment:
+  #     DB_HOST: mysql
+  #     DB_PORT: 3306
+  #     DB_USERNAME: mysql_user
+  #     DB_PASSWORD: mysql_password
+  #     DB_NAME: travellux
+
+  booking-service:
+    depends_on:
+      - mysql
+    container_name: booking-service
+    build:
+      dockerfile: Dockerfile
+      context: ./booking-service
+    ports:
+      - 3050:3050
+    environment:
+      DB_TYPE: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: mysql_user
+      DB_PASSWORD: mysql_password
+      DB_NAME: travellux
+
+  # client:
+  #   container_name: client
+  #   build:
+  #     dockerfile: Dockerfile
+  #     context: ./frontend
+  #   ports:
+  #     - 4000:80
+  # adminer:
+  #     image: adminer:latest
+  #     restart: unless-stopped
+  #     ports:
+  #       - 8000:8080
+  #     depends_on:
+  #       - mysql
+  #     environment:
+  #       ADMINER_DEFAULT_SERVER: mysql
+
+
+# Observability services
+  loki:
+    image: grafana/loki:2.6.1
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./config/loki/loki-config.yml:/etc/loki/loki-config.yaml
+      - ./data/loki/data:/data/loki
+    command: -config.file=/etc/loki/local-config.yaml
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "14268:14268"
+      - "9411:9411"
+
+  prometheus:
+    image: prom/prometheus:latest
+    user: root
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yaml
+    ports:
+      - 9090:9090
+
+  promtail:
+    image: grafana/promtail:2.6.1
+    volumes:
+      - /var/log:/var/log
+      - ./config/promtail/promtail-config.yml:/etc/promtail/promtail-config.yaml
+      - ./data/api/:/usr/api/data/
+    command: -config.file=/etc/promtail/promtail-config.yaml
+    depends_on:
+      - loki
+
+
+  grafana:
+    image: grafana/grafana:latest
+    environment: 
+      # Disable authentication
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - ./config/provisioning/:/etc/grafana/provisioning
+    ports:
+      - 3000:3000

@@ -4,26 +4,33 @@ import { Repository } from 'typeorm';
 
 import { CreateReservationDto } from './dto/reservations.dto';
 import { Reservation } from './entity/reservation.entity';
+import { InjectMetric } from '@willsoto/nestjs-prometheus';
+import { Counter } from "prom-client";
 
 @Injectable()
 export class ReservationsService {
     constructor(
         @InjectRepository(Reservation)
         private reservationsRepository: Repository<Reservation>,
+        @InjectMetric("http_request_total") public counter: Counter<string>
+
     ){}
 
     // Find all reservations
     async findAll(): Promise<Reservation[]>{
+        this.counter.inc(1)
         return await this.reservationsRepository.find();
     }
 
     // Find One reservation by id
     async findOne(id: string): Promise<Reservation>{
+        this.counter.inc(1)
         return await this.reservationsRepository.findOne(id);
     }
 
     // Create a new reservation
     async create(createReservationDto: CreateReservationDto): Promise<Reservation>{
+        this.counter.inc(1)
         const newReservation = new Reservation();
         newReservation.firstName = createReservationDto.firstName;
         newReservation.lastName = createReservationDto.lastName;
@@ -39,11 +46,13 @@ export class ReservationsService {
 
     // Delete a reservation By id
     async delete(id: string): Promise<void>{
+        this.counter.inc(1)
         await this.reservationsRepository.delete(id);
     }
 
     // Update a reservation by id
     async updateReservation(reservation: Reservation, updateReservationDto: CreateReservationDto): Promise<Reservation> {
+        this.counter.inc(1)
         const {
             firstName,
             lastName,
