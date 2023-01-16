@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Car } from '../models/car.model';
 import { Reservation } from '../models/reservation.model';
+import { environment } from './../../environments/environment';
 
-
-
+const backendHost = environment.BACKEND_HOST || "localhost";
+const backendServicePort = environment.BACKEND_PORT || 3000;
 
 @Injectable({
   providedIn: 'root'
@@ -32,59 +33,59 @@ export class CarRentalService {
 
   // All cars available
   getAvailableCars(): Observable<Car[]> {
-    return this.http.get<Car[]>("http://api:3000/cars");
+    return this.http.get<Car[]>(`http://${backendHost}:${backendServicePort}/cars`);
   }
 
   // Cars Fileres
   // 1. Brand:
   getAllBrands(): Observable<string[]> {
-    return this.http.get<string[]>("http://api:3000/cars/all/brands");
+    return this.http.get<string[]>(`ttp://${backendHost}:${backendServicePort}/cars/all/brands`);
   }
   getCarsByBrand(brand: string): Observable<Car[]> {
-    return this.http.get<Car[]>("http://api:3000/cars/brands/"+brand);
+    return this.http.get<Car[]>(`http://${backendHost}:${backendServicePort}/cars/brands/`+brand);
   }
 
   // 2. Year:
   getAllYears(): Observable<number[]> {
-    return this.http.get<number[]>("http://api:3000/cars/all/years");
+    return this.http.get<number[]>(`http://${backendHost}:${backendServicePort}/cars/all/years`);
   }
   getCarsByYear(year: number): Observable<Car[]> {
-    return this.http.get<Car[]>("http://api:3000/cars/years/"+year);
+    return this.http.get<Car[]>(`http://${backendHost}:${backendServicePort}/cars/years/`+year);
   }
 
   // 3. Car classes:
   getAllCarClasses(): Observable<string[]> {
-    return this.http.get<string[]>("http://api:3000/cars/all/car_classes");
+    return this.http.get<string[]>(`http://${backendHost}:${backendServicePort}/cars/all/car_classes`);
   }
   getCarsByClass(brand: string): Observable<Car[]> {
-    return this.http.get<Car[]>("http://api:3000/cars/classes/"+brand);
+    return this.http.get<Car[]>(`http://${backendHost}:${backendServicePort}/cars/classes/`+brand);
   }
 
   // 4. Car types:
   getAllCarTypes(): Observable<string[]> {
-    return this.http.get<string[]>("http://api:3000/cars/all/car_types");
+    return this.http.get<string[]>(`http://${backendHost}:${backendServicePort}/cars/all/car_types`);
   }
   getCarsByType(car_type: string): Observable<Car[]> {
-    return this.http.get<Car[]>("http://api:3000/cars/types/"+car_type);
+    return this.http.get<Car[]>(`http://${backendHost}:${backendServicePort}/cars/types/`+car_type);
   }
 
   // 5. AC:
   getCarsByAC(ac: string): Observable<Car[]> {
-    return this.http.get<Car[]>("http://api:3000/cars/airconditioner/"+ac);
+    return this.http.get<Car[]>(`http://${backendHost}:${backendServicePort}/cars/airconditioner/`+ac);
   }
   // 6. Fuel policy:
   getAllFuelPolicies(): Observable<string[]> {
-    return this.http.get<string[]>("http://api:3000/cars/all/fuel_policies");
+    return this.http.get<string[]>(`http://${backendHost}:${backendServicePort}/cars/all/fuel_policies`);
   }
   getCarsByFuelPolicy(fuel_policy: string): Observable<Car[]> {
-    return this.http.get<Car[]>("http://api:3000/cars/fuelpolicy/"+fuel_policy);
+    return this.http.get<Car[]>(`http://${backendHost}:${backendServicePort}/cars/fuelpolicy/`+fuel_policy);
   }
   // 7. Color:
   getAllColors(): Observable<string[]> {
-    return this.http.get<string[]>("http://api:3000/cars/all/colors");
+    return this.http.get<string[]>(`http://${backendHost}:${backendServicePort}/cars/all/colors`);
   }
   getCarsByColor(color: string): Observable<Car[]> {
-    return this.http.get<Car[]>("http://api:3000/cars/colors/"+color);
+    return this.http.get<Car[]>(`http://${backendHost}:${backendServicePort}/cars/colors/`+color);
   }
 
   // Get the reservation params
@@ -131,7 +132,7 @@ export class CarRentalService {
       this.car_id);
 
     return this.http.post<Reservation>(
-      "http://api:3000/reservations",
+      `http://${backendHost}:${backendServicePort}/reservations`,
       reservation,
       this.httpOptions);
   }

@@ -23,7 +23,7 @@ export class RegisterComponent implements OnInit {
   isSignUpFailed = false;
   errorMessage = '';
   selectedFile: any;
- 
+
   imageSrc: any;
 
   constructor(private authService: AuthService) {}

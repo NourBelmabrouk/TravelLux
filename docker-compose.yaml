@@ -55,6 +55,11 @@ services:
       context: ./frontend
     ports:
       - 4000:80
+    environment:
+      BOOKING_HOST: localhost
+      BOOKING_PORT: 3050
+      BACKEND_HOST: localhost
+      BACKEND_PORT: 3000
   adminer:
       image: adminer:latest
       restart: unless-stopped

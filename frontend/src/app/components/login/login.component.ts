@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { TokenStorageService } from '../../services/token-storage.service';
 
+import { environment } from '../../../environments/environment';
+
+const backendHost = environment.BACKEND_HOST || "localhost";
+const backendServicePort = environment.BACKEND_PORT || 3000;
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -25,7 +29,7 @@ export class LoginComponent implements OnInit {
       this.isLoggedIn = true;
       const user = this.tokenStorage.getUser();
       this.username = user.user.username;
-      this.profilepic="http://localhost:3000/users/showpic/"+user.user.profilepic
+      this.profilepic=`http://${backendHost}:${backendServicePort}/users/showpic/"+user.user.profilepic`
 
     }
   }

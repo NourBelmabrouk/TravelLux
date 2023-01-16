@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TokenStorageService } from '../../services/token-storage.service';
 
+import { environment } from '../../../environments/environment';
+
+const backendHost = environment.BACKEND_HOST || "localhost";
+const backendServicePort = environment.BACKEND_PORT || 3000;
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -23,7 +27,7 @@ export class ProfileComponent implements OnInit {
 
   }
   showFile():string{
-    return "http://localhost:3000/users/showpic/"+this.currentUser.user.profilepic
+    return `http://${backendHost}:${backendServicePort}/users/showpic/`+this.currentUser.user.profilepic
   }
 
 }
