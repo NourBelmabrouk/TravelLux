@@ -48,6 +48,7 @@ services:
       DB_USERNAME: mysql_user
       DB_PASSWORD: mysql_password
       DB_NAME: travellux
+      LOKI_HOST: http://loki:3100
   client:
     container_name: client
     build:
@@ -69,3 +70,47 @@ services:
         - mysql
       environment:
         ADMINER_DEFAULT_SERVER: mysql
+
+# Observability services
+  loki:
+    image: grafana/loki:2.6.1
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./config/loki/loki-config.yml:/etc/loki/loki-config.yaml
+      - ./data/loki/data:/data/loki
+    command: -config.file=/etc/loki/local-config.yaml
+
+  prometheus:
+    image: prom/prometheus:latest
+    user: root
+    volumes:
+      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yaml
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+
+  promtail:
+    image: grafana/promtail:2.6.1
+    volumes:
+      - /var/log:/var/log
+      - ./config/promtail/promtail-config.yml:/etc/promtail/promtail-config.yaml
+      - ./data/api/:/usr/api/data/
+    command: -config.file=/etc/promtail/promtail-config.yaml
+    depends_on:
+      - loki
+
+  grafana:
+    image: grafana/grafana:latest
+    environment: 
+      # Disable authentication
+      GF_AUTH_DISABLE_LOGIN_FORM: true
+      GF_AUTH_ANONYMOUS_ENABLED: true
+      GF_AUTH_ANONYMOUS_ORG_NAME: Main Org.
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+      GF_USERS_ALLOW_SIGN_UP: false
+    volumes:
+      - ./config/provisioning/:/etc/grafana/provisioning
+    ports:
+      - 3001:3000  

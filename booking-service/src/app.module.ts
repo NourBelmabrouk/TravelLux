@@ -5,12 +5,23 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MulterModule } from '@nestjs/platform-express';
 import { BookingModule } from './booking-module/booking.module';
-
+import { LogsModule } from './logs/logs.module';
+import { LokiLoggerModule } from 'nestjs-loki-logger';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggingInterceptor } from './logs/logging.interceptor';
+import { TracerModule } from './tracer/tracer.module';
+import { MonitoringModule } from './monitoring/monitoring.module';
+import { TracerService } from './tracer/tracer.service';
+import { BookingOrderService } from './booking-module/booking-order.service';
 
 
 require("dotenv").config()
 @Module({
   imports: [
+    // PrometheusModule.register({
+    //   path: '/metrics'
+    // }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -23,12 +34,31 @@ require("dotenv").config()
       database: process.env.DB_NAME,
       autoLoadEntities:true,
       synchronize: true,
-    }),MulterModule.register({
+    }),
+    LokiLoggerModule.forRoot({
+      lokiUrl: process.env.LOKI_HOST,   // loki server
+      labels: {
+        'label': 'travlux-booking-service',     // app level labels, these labels will be attached to every log in the application
+      },
+      logToConsole: true,
+      gzip: false // contentEncoding support gzip or not
+    }),
+    MulterModule.register({
       dest: './files',
     }),
     BookingModule,
+    LogsModule,
+    TracerModule,
+    MonitoringModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR, useClass: LoggingInterceptor,
+    },
+    BookingModule,
+    TracerService
+  ],
 })
 export class AppModule {}
