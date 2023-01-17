@@ -9,7 +9,7 @@ TRAVLUX offers:
 > You can find the infrastructure repository [here](https://github.com/NourBelmabrouk/TravelLux_infra).
 
 ## Application
-4 Microservices: 
+Microservices: 
 - __Frontend:__ Implemented with Angular. 
 - __Backend:__ 
 - __Booking Service:__ 
@@ -21,7 +21,7 @@ TRAVLUX offers:
 
 
 ## Docker
-We dockerized the 4 microservices and pushed to Dockerhub.
+We dockerized the microservices and pushed to Dockerhub.
 
 ## Observability
 
