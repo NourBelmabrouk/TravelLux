@@ -26,7 +26,7 @@ Microservices:
 We dockerized the microservices and pushed to Dockerhub.
 
 ## Observability
-In this part, we will focus on the three pillars of Observability (logging, metrics and traces) in one microservice: booking-service.
+In this part, we will focus on the three pillars of Observability (logging, metrics and traces) in one microservice: __booking-service__.
 
 ![observability](https://user-images.githubusercontent.com/62619786/212779731-d0634df5-159f-4eab-8d70-034a3e518651.PNG)
 
@@ -41,7 +41,7 @@ We used Grafana to centralize the analysis and visualization of our data. We cre
 ![logs](https://user-images.githubusercontent.com/62619786/212911340-85af592b-d0d3-47ce-b458-e35f559461bc.png)
 
 ### 1. Metrics - Prometheus 
-We used @willsoto/nestjs-prometheus module which exposes metrics to be pulled by Prometheus. It also captures different metrics from the code, such as: CPU usage, Memory usage and so on.
+We used ``@willsoto/nestjs-prometheus`` module which exposes metrics to be pulled by __Prometheus__. It also captures different metrics from the code, such as: CPU usage, Memory usage and so on.
 
 We added a custom metric which is http_request_total, that allow us to track how many request we are processing (create/update/delete of a booking order).
 The metric is labeled in a way that allows you to get the success ratio (% of successful requests) and to know many requests each http route processed (post, get, ...):
@@ -49,7 +49,7 @@ The metric is labeled in a way that allows you to get the success ratio (% of su
 ![metrics get post](https://user-images.githubusercontent.com/62619786/212911694-6ea78a4a-8f95-4e96-834d-a615ce3ff0a3.png)
 
 ### 2. Logs - Loki 
-We used Loki, which is a log aggregation system designed to store and query logs from all your applications and infrastructure.
+We used __Loki__, which is a log aggregation system designed to store and query logs from all your applications and infrastructure.
 We added the ``request_id``, the ``ip_address`` and the ``statusCode`` in every log so that it can help us while debugging.
 
 ![logs id](https://user-images.githubusercontent.com/62619786/212911657-90c8565b-2308-4687-8828-825da2f7055b.png)
